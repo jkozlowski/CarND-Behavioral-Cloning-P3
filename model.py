@@ -37,7 +37,7 @@ with open(args.data_folder + '/driving_log.csv') as csvfile:
 
 train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 
-correction = 0.4 # this is a parameter to tune
+correction = 0.3 # this is a parameter to tune
 num_transformations = 6
 
 def get_image(path):
