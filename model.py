@@ -26,7 +26,7 @@ with open(args.data_folder + '/driving_log.csv') as csvfile:
     reader = csv.reader(csvfile)
     next(reader, None)
     for line in reader:
-        lines.append(line)
+        samples.append(line)
 
 train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 
