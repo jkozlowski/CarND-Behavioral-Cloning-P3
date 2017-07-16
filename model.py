@@ -50,7 +50,7 @@ y_train = np.array(augmented_measurements)
 shape = (160,320,3)
 
 model = Sequential()
-model.add(Cropping2D(cropping=((50,20), (0,0)), input_shape=shape))
+model.add(Cropping2D(cropping=((70,25), (0,0)), input_shape=shape))
 model.add(Lambda(lambda x: (x / 255.0) - 0.5))
 model.add(Convolution2D(6,5,5, activation='relu', border_mode='valid'))
 model.add(MaxPooling2D(pool_size=(2, 2), strides=(2,2), border_mode='valid'))
