@@ -50,7 +50,7 @@ y_train = np.array(augmented_measurements)
 shape = (160,320,3)
 
 model = Sequential()
-model.add(Lambda(lambda x: (x / 255.0) - 0.5), input_shape=shape)
+model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=shape))
 model.add(Cropping2D(cropping=((50,20), (0,0))))
 # NVidia
 model.add(Convolution2d(24,5,5, subsample=(2,2), activation='relu'))
