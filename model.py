@@ -1,3 +1,4 @@
+import argparse
 import csv
 import cv2
 import numpy as np
@@ -5,9 +6,21 @@ from keras.models import Sequential
 from keras.layers import Flatten, Dense, Lambda, Dropout
 from keras.layers.convolutional import Convolution2D, Cropping2D
 from keras.layers.pooling import MaxPooling2D
+from keras.models import load_model
+from pathlib import Path
+
+weights_file = 'model.h5'
+
+parser = argparse.ArgumentParser(description='Driver Training')
+parser.add_argument(
+    'data_folder',
+    type=str,
+    help='Path to data.'
+)
+args = parser.parse_args()
 
 lines = []
-with open('../data/driving_log.csv') as csvfile:
+with open(args.data_folder + '/driving_log.csv') as csvfile:
     reader = csv.reader(csvfile)
     next(reader, None)
     for line in reader:
@@ -20,7 +33,7 @@ correction = 0.4 # this is a parameter to tune
 
 def get_image(path):
     filename = path.split('/')[-1]
-    current_path = '../data/IMG/' + filename
+    current_path = args.data_folder + '/IMG/' + filename
     return cv2.imread(current_path)
 
 for line in lines:
@@ -64,6 +77,9 @@ model.add(Dense(50))
 model.add(Dense(10))
 model.add(Dense(1))
 
+if Path(weights_file).exists():
+    model.load_weights(weights_file)
+
 # LeNet
 # model.add(Convolution2D(6,5,5, activation='relu', border_mode='valid'))
 # model.add(MaxPooling2D(pool_size=(2, 2), strides=(2,2), border_mode='valid'))
@@ -79,5 +95,5 @@ model.add(Dense(1))
 model.compile(loss='mse', optimizer='adam')
 model.fit(X_train, y_train, validation_split=0.2, nb_epoch=3, shuffle=True)
 
-model.save('model.h5')
+model.save(weights_file)
 
