@@ -20,6 +20,12 @@ parser.add_argument(
     type=str,
     help='Path to data.'
 )
+parser.add_argument(
+    'number_epochs',
+    type=int,
+    default='5',
+    help='Number of epochs.'
+)
 args = parser.parse_args()
 
 samples = []
@@ -31,7 +37,7 @@ with open(args.data_folder + '/driving_log.csv') as csvfile:
 
 train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 
-correction = 0.2 # this is a parameter to tune
+correction = 0.4 # this is a parameter to tune
 num_transformations = 6
 
 def get_image(path):
@@ -117,6 +123,6 @@ model.fit_generator(train_generator,
                     samples_per_epoch=len(train_samples * num_transformations),
                     validation_data=validation_generator,
                     nb_val_samples=len(validation_samples * num_transformations),
-                    nb_epoch=5)
+                    nb_epoch=args.number_epochs)
 
 model.save(weights_file)
