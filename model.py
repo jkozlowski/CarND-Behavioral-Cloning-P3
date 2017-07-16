@@ -33,8 +33,8 @@ for line in lines:
     img_left = get_image(line[0])
     img_right = get_image(line[0])
 
-    images.extend(img_center, img_left, img_right)
-    measurements.extend(steering_center, steering_left, steering_right)
+    images.extend([img_center, img_left, img_right])
+    measurements.extend([steering_center, steering_left, steering_right])
     
 augmented_images = []
 augmented_measurements = []
