@@ -27,7 +27,7 @@ y_train = np.array(measurements)
 shape = (160,320,3)
 
 model = Sequential()
-model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=shape)
+model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=shape))
 model.add(Flatten())
 model.add(Dense(1))
 
