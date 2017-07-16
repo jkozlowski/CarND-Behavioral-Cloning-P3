@@ -21,10 +21,9 @@ correction = 0.2 # this is a parameter to tune
 def get_image(path):
     filename = path.split('/')[-1]
     current_path = '../data/IMG/' + filename
-    image = cv2.imread(current_path)
+    return cv2.imread(current_path)
 
 for line in lines:
-
     steering_center = float(line[3])
     steering_left = steering_center + correction
     steering_right = steering_center - correction
