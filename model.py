@@ -10,6 +10,7 @@ from keras.models import load_model
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 import sklearn
+from random import shuffle
 
 weights_file = 'model.h5'
 
@@ -31,6 +32,7 @@ with open(args.data_folder + '/driving_log.csv') as csvfile:
 train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 
 correction = 0.2 # this is a parameter to tune
+num_transformations = 6
 
 def get_image(path):
     filename = path.split('/')[-1]
@@ -58,6 +60,9 @@ def generator(samples, batch_size=32):
                 images.extend([img_center, img_left, img_right])
                 angles.extend([steering_center, steering_left, steering_right])
 
+            augmented_images = []
+            augmented_measurements = []
+
             for image,angle in zip(images, angles):
                 augmented_images.append(image)
                 augmented_measurements.append(angle)
@@ -68,27 +73,6 @@ def generator(samples, batch_size=32):
             X_train = np.array(augmented_images)
             y_train = np.array(augmented_measurements)
             yield sklearn.utils.shuffle(X_train, y_train)
-
-# for line in lines:
-#     steering_center = float(line[3])
-#     steering_left = steering_center + correction
-#     steering_right = steering_center - correction
-    
-#     img_center = get_image(line[0])
-#     img_left = get_image(line[0])
-#     img_right = get_image(line[0])
-
-#     images.extend([img_center, img_left, img_right])
-#     measurements.extend([steering_center, steering_left, steering_right])
-    
-# augmented_images = []
-# augmented_measurements = []
-
-# for image,measurement in zip(images, measurements):
-#     augmented_images.append(image)
-#     augmented_measurements.append(measurement)
-#     augmented_images.append(cv2.flip(image, 1))
-#     augmented_measurements.append(measurement*-1.0)
 
 # compile and train the model using the generator function
 train_generator = generator(train_samples, batch_size=32)
@@ -130,9 +114,9 @@ model.compile(loss='mse', optimizer='adam')
 
 # model.fit(X_train, y_train, validation_split=0.2, nb_epoch=5, shuffle=True)
 model.fit_generator(train_generator,
-                    samples_per_epoch=len(train_samples),
+                    samples_per_epoch=len(train_samples * num_transformations),
                     validation_data=validation_generator,
-                    nb_val_samples=len(validation_samples),
+                    nb_val_samples=len(validation_samples * num_transformations),
                     nb_epoch=5)
 
 model.save(weights_file)
