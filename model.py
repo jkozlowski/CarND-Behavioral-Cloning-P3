@@ -129,10 +129,10 @@ if Path(weights_file).exists():
 model.compile(loss='mse', optimizer='adam')
 
 # model.fit(X_train, y_train, validation_split=0.2, nb_epoch=5, shuffle=True)
-model.fit_generator(train_generator, /
-                    samples_per_epoch=len(train_samples), /
-                    validation_data=validation_generator, /
-                    nb_val_samples=len(validation_samples), /
+model.fit_generator(train_generator,
+                    samples_per_epoch=len(train_samples),
+                    validation_data=validation_generator,
+                    nb_val_samples=len(validation_samples),
                     nb_epoch=5)
 
 model.save(weights_file)
