@@ -16,7 +16,7 @@ with open('../data/driving_log.csv') as csvfile:
 images = []
 measurements = []
 
-correction = 0.3 # this is a parameter to tune
+correction = 0.4 # this is a parameter to tune
 
 def get_image(path):
     filename = path.split('/')[-1]
