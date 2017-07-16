@@ -34,8 +34,8 @@ for image,measurement in zip(images, measurements):
     augmented_images.append(image)
     augmented_measurements.append(measurement*-1.1)
 
-X_train = np.array(images)
-y_train = np.array(measurements)
+X_train = np.array(augmented_images)
+y_train = np.array(augmented_measurements)
 
 shape = (160,320,3)
 
