@@ -63,7 +63,7 @@ model.add(Dense(84))
 model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
-model.fit(X_train, y_train, validation_split=0.2, nb_epoch=10, shuffle=True)
+model.fit(X_train, y_train, validation_split=0.2, nb_epoch=3, shuffle=True)
 
 model.save('model.h5')
 
