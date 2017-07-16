@@ -2,7 +2,7 @@ import csv
 import cv2
 import numpy as np
 from keras.models import Sequential
-from keras.layers import Flatten, Dense, Lambda
+from keras.layers import Flatten, Dense, Lambda, Dropout
 from keras.layers.convolutional import Convolution2D
 from keras.layers.pooling import MaxPooling2D
 
@@ -33,8 +33,10 @@ model = Sequential()
 model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=shape))
 model.add(Convolution2D(6,5,5, activation='relu', border_mode='valid'))
 model.add(MaxPooling2D(pool_size=(2, 2), strides=(2,2), border_mode='valid'))
+model.add(Dropout(0.25))
 model.add(Convolution2D(6,5,5, activation='relu', border_mode='valid'))
 model.add(MaxPooling2D(pool_size=(2, 2), strides=(2,2), border_mode='valid'))
+model.add(Dropout(0.5))
 model.add(Flatten())
 model.add(Dense(120))
 model.add(Dense(84))
