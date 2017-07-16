@@ -9,6 +9,7 @@ from keras.layers.pooling import MaxPooling2D
 lines = []
 with open('../data/driving_log.csv') as csvfile:
     reader = csv.reader(csvfile)
+    next(reader, None)
     for line in reader:
         lines.append(line)
 
@@ -31,9 +32,9 @@ shape = (160,320,3)
 model = Sequential()
 model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=shape))
 model.add(Convolution2D(6,5,5, activation='relu', input_shape=shape, border_mode='same'))
-model.add(MaxPooling2D(pool_size=(2, 2), strides=(2,2), padding='valid'))
+model.add(MaxPooling2D(pool_size=(2, 2), strides=(2,2), border_mode='valid'))
 model.add(Convolution2D(16,5,5, activation='relu', border_mode='same'))
-model.add(MaxPooling2D(pool_size=(2, 2), strides=(2,2), padding='valid'))
+model.add(MaxPooling2D(pool_size=(2, 2), strides=(2,2), border_mode='valid'))
 model.add(Flatten())
 model.add(Dense(120))
 model.add(Dense(84))
