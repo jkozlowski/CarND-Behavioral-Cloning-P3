@@ -16,15 +16,26 @@ with open('../data/driving_log.csv') as csvfile:
 images = []
 measurements = []
 
-for line in lines:
-    source_path = line[0]
-    filename = source_path.split('/')[-1]
+correction = 0.2 # this is a parameter to tune
+
+def get_image(path):
+    filename = path.split('/')[-1]
     current_path = '../data/IMG/' + filename
     image = cv2.imread(current_path)
-    images.append(image)
-    measurement = float(line[3])
-    measurements.append(measurement)
 
+for line in lines:
+
+    steering_center = float(line[3])
+    steering_left = steering_center + correction
+    steering_right = steering_center - correction
+    
+    img_center = get_image(line[0])
+    img_left = get_image(line[0])
+    img_right = get_image(line[0])
+
+    images.extend(img_center, img_left, img_right)
+    measurements.extend(steering_center, steering_left, steering_right)
+    
 augmented_images = []
 augmented_measurements = []
 
