@@ -11,6 +11,8 @@ from pathlib import Path
 from sklearn.model_selection import train_test_split
 import sklearn
 from random import shuffle
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt 
 
 weights_file = 'model.h5'
@@ -38,7 +40,13 @@ with open(args.data_folder + '/driving_log.csv') as csvfile:
 
 train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 
-correction = 0.3 # this is a parameter to tune
+# Size of correction when deriving left and right steering measurements
+correction = 0.15
+
+# Starting with some number of measurements,
+# we use 3 images: center, left, right; 
+# then we flip all the images, 
+# meaning we have 6 times the original number of measurements
 num_transformations = 6
 
 def get_image(path):
@@ -70,6 +78,7 @@ def generator(samples, batch_size=32):
             augmented_images = []
             augmented_measurements = []
 
+            # Flip the images
             for image,angle in zip(images, angles):
                 augmented_images.append(image)
                 augmented_measurements.append(angle)
@@ -86,10 +95,11 @@ validation_generator = generator(validation_samples, batch_size=32)
 
 shape = (160,320,3)
 
+# Create the model
 model = Sequential()
 model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=shape))
 # Crop the unimportant part of the image
-model.add(Cropping2D(cropping=((50,20), (0,0))))
+model.add(Cropping2D(cropping=((60,100), (0,0))))
 # NVidia
 model.add(Convolution2D(24,5,5, subsample=(2,2), activation='relu'))
 model.add(Convolution2D(36,5,5, subsample=(2,2), activation='relu'))
@@ -102,6 +112,7 @@ model.add(Dropout(0.5))
 model.add(Dense(50))
 model.add(Dropout(0.5))
 model.add(Dense(10))
+model.add(Dropout(0.5))
 model.add(Dense(1))
 
 if Path(weights_file).exists():
