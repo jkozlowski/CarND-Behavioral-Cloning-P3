@@ -51,7 +51,7 @@ dropout = 0.5
 # we use 3 images: center, left, right; 
 # then we flip all the images, 
 # meaning we have 6 times the original number of measurements
-num_transformations = 9
+num_transformations = 6
 
 def get_image(path):
     filename = path.split('/')[-1]
