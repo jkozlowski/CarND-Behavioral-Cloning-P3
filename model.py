@@ -41,7 +41,10 @@ with open(args.data_folder + '/driving_log.csv') as csvfile:
 train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 
 # Size of correction when deriving left and right steering measurements
-correction = 0.35
+correction = 0.4
+
+# Size of dropout
+dropout = 0.5
 
 # Starting with some number of measurements,
 # we use 3 images: center, left, right; 
@@ -108,11 +111,11 @@ model.add(Convolution2D(64,3,3, subsample=(2,2), activation='relu'))
 model.add(Convolution2D(64,3,3, subsample=(2,2), activation='relu'))
 model.add(Flatten())
 model.add(Dense(100))
-model.add(Dropout(0.5))
+model.add(Dropout(dropout))
 model.add(Dense(80))
-model.add(Dropout(0.5))
+model.add(Dropout(dropout))
 model.add(Dense(50))
-model.add(Dropout(0.5))
+model.add(Dropout(dropout))
 model.add(Dense(10))
 model.add(Dense(1))
 
