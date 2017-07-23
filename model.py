@@ -50,12 +50,23 @@ dropout = 0.5
 # we use 3 images: center, left, right; 
 # then we flip all the images, 
 # meaning we have 6 times the original number of measurements
-num_transformations = 6
+num_transformations = 12
 
 def get_image(path):
     filename = path.split('/')[-1]
     current_path = args.data_folder + '/IMG/' + filename
     return cv2.imread(current_path)
+
+# Generate random brightness function, produce darker transformation 
+def random_brightness(image):
+    #Convert 2 HSV colorspace from RGB colorspace
+    hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
+    #Generate new random brightness
+    rand = random.uniform(0.3,1.0)
+    hsv[:,:,2] = rand*hsv[:,:,2]
+    #Convert back to RGB colorspace
+    new_img = cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
+    return new_img 
 
 def generator(samples, batch_size=32):
     num_samples = len(samples)
@@ -87,6 +98,8 @@ def generator(samples, batch_size=32):
                 augmented_measurements.append(angle)
                 augmented_images.append(cv2.flip(image, 1))
                 augmented_measurements.append(angle*-1.0)
+                augmented_images.append(random_brightness(image))
+                augmented_measurements.append(angle)
 
             X_train = np.array(augmented_images)
             y_train = np.array(augmented_measurements)
