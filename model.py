@@ -109,15 +109,13 @@ model.add(Convolution2D(64,3,3, subsample=(2,2), activation='relu'))
 model.add(Flatten())
 model.add(Dense(100))
 model.add(Dropout(0.5))
-model.add(Dense(80))
-model.add(Dropout(0.5))
 model.add(Dense(50))
 model.add(Dropout(0.5))
 model.add(Dense(10))
 model.add(Dense(1))
 
-if Path(weights_file).exists():
-    model.load_weights(weights_file)
+# if Path(weights_file).exists():
+#     model.load_weights(weights_file)
 
 model.compile(loss='mse', optimizer='adam')
 
