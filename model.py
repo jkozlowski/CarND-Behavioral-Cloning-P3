@@ -10,6 +10,7 @@ from keras.models import load_model
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 import sklearn
+import random
 from random import shuffle
 import matplotlib
 matplotlib.use('Agg')
