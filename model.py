@@ -99,7 +99,7 @@ shape = (160,320,3)
 model = Sequential()
 model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=shape))
 # Crop the unimportant part of the image
-model.add(Cropping2D(cropping=((50,20), (0,0))))
+model.add(Cropping2D(cropping=((60,30), (0,0))))
 # NVidia
 model.add(Convolution2D(24,5,5, subsample=(2,2), activation='relu'))
 model.add(Convolution2D(36,5,5, subsample=(2,2), activation='relu'))
@@ -113,9 +113,6 @@ model.add(Dense(50))
 model.add(Dropout(0.5))
 model.add(Dense(10))
 model.add(Dense(1))
-
-# if Path(weights_file).exists():
-#     model.load_weights(weights_file)
 
 model.compile(loss='mse', optimizer='adam')
 
