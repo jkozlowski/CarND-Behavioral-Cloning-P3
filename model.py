@@ -44,7 +44,7 @@ train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 correction = 0.35
 
 # Size of dropout
-dropout = 0.6
+dropout = 0.4
 
 # Starting with some number of measurements,
 # we use 3 images: center, left, right; 
