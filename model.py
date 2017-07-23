@@ -87,7 +87,7 @@ def generator(samples, batch_size=32):
                 augmented_images.append(image)
                 augmented_measurements.append(angle)
                 augmented_images.append(cv2.flip(image, 1))
-                augmented_measurements.append(angle*-1.0)
+                augmented_measurements.append(-angle)
 
             X_train = np.array(augmented_images)
             y_train = np.array(augmented_measurements)
