@@ -41,7 +41,7 @@ with open(args.data_folder + '/driving_log.csv') as csvfile:
 train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 
 # Size of correction when deriving left and right steering measurements
-correction = 0.45
+correction = 0.35
 
 # Starting with some number of measurements,
 # we use 3 images: center, left, right; 
