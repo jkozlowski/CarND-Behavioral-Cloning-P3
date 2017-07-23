@@ -11,6 +11,7 @@ from pathlib import Path
 from sklearn.model_selection import train_test_split
 import sklearn
 from random import shuffle
+import matplotlib.pyplot as plt 
 
 weights_file = 'model.h5'
 
@@ -75,7 +76,6 @@ def generator(samples, batch_size=32):
                 augmented_images.append(cv2.flip(image, 1))
                 augmented_measurements.append(angle*-1.0)
 
-            # trim image to only see section with road
             X_train = np.array(augmented_images)
             y_train = np.array(augmented_measurements)
             yield sklearn.utils.shuffle(X_train, y_train)
@@ -88,6 +88,7 @@ shape = (160,320,3)
 
 model = Sequential()
 model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=shape))
+# Crop the unimportant part of the image
 model.add(Cropping2D(cropping=((50,20), (0,0))))
 # NVidia
 model.add(Convolution2D(24,5,5, subsample=(2,2), activation='relu'))
@@ -106,25 +107,25 @@ model.add(Dense(1))
 if Path(weights_file).exists():
     model.load_weights(weights_file)
 
-# LeNet
-# model.add(Convolution2D(6,5,5, activation='relu', border_mode='valid'))
-# model.add(MaxPooling2D(pool_size=(2, 2), strides=(2,2), border_mode='valid'))
-# model.add(Dropout(0.25))
-# model.add(Convolution2D(6,5,5, activation='relu', border_mode='valid'))
-# model.add(MaxPooling2D(pool_size=(2, 2), strides=(2,2), border_mode='valid'))
-# model.add(Dropout(0.25))
-# model.add(Flatten())
-# model.add(Dense(120))
-# model.add(Dense(84))
-# model.add(Dense(1))
-
 model.compile(loss='mse', optimizer='adam')
 
-# model.fit(X_train, y_train, validation_split=0.2, nb_epoch=5, shuffle=True)
-model.fit_generator(train_generator,
+history_object = model.fit_generator(train_generator,
                     samples_per_epoch=len(train_samples * num_transformations),
                     validation_data=validation_generator,
                     nb_val_samples=len(validation_samples * num_transformations),
-                    nb_epoch=args.number_epochs)
+                    nb_epoch=args.number_epochs,
+                    verbose=1)
 
 model.save(weights_file)
+
+### print the keys contained in the history object
+print(history_object.history.keys())
+
+### plot the training and validation loss for each epoch
+plt.plot(history_object.history['loss'])
+plt.plot(history_object.history['val_loss'])
+plt.title('model mean squared error loss')
+plt.ylabel('mean squared error loss')
+plt.xlabel('epoch')
+plt.legend(['training set', 'validation set'], loc='upper right')
+plt.savefig('training_visualisation.png')()
