@@ -116,6 +116,8 @@ model.add(Dense(80))
 model.add(Dropout(dropout))
 model.add(Dense(50))
 model.add(Dropout(dropout))
+model.add(Dense(20))
+model.add(Dropout(dropout))
 model.add(Dense(10))
 model.add(Dense(1))
 
