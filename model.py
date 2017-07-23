@@ -15,6 +15,7 @@ from random import shuffle
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt 
+from keras.backend import tf as ktf
 
 weights_file = 'model.h5'
 
@@ -52,6 +53,9 @@ dropout = 0.5
 # then we flip all the images, 
 # meaning we have 6 times the original number of measurements
 num_transformations = 6
+
+# Size of batches
+batch_size = 200
 
 def get_image(path):
     filename = path.split('/')[-1]
@@ -94,8 +98,8 @@ def generator(samples, batch_size=32):
             yield sklearn.utils.shuffle(X_train, y_train)
 
 # compile and train the model using the generator function
-train_generator = generator(train_samples, batch_size=32)
-validation_generator = generator(validation_samples, batch_size=32)
+train_generator = generator(train_samples, batch_size=batch_size)
+validation_generator = generator(validation_samples, batch_size=batch_size)
 
 shape = (160,320,3)
 
@@ -104,6 +108,8 @@ model = Sequential()
 model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=shape))
 # Crop the unimportant part of the image
 model.add(Cropping2D(cropping=((40,23), (0,0))))
+# Resize to 66x66, as per NVidia paper
+model.add(Lambda(lambda image: ktf.image.resize_images(image, (66, 66))))
 # NVidia
 model.add(Convolution2D(24,5,5, subsample=(2,2), activation='relu'))
 model.add(Convolution2D(36,5,5, subsample=(2,2), activation='relu'))
