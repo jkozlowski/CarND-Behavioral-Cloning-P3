@@ -58,17 +58,6 @@ def get_image(path):
     current_path = args.data_folder + '/IMG/' + filename
     return cv2.imread(current_path)
 
-# Generate random brightness function, produce darker transformation 
-def random_brightness(image):
-    #Convert 2 HSV colorspace from RGB colorspace
-    hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
-    #Generate new random brightness
-    rand = random.uniform(0.3,1.0)
-    hsv[:,:,2] = rand*hsv[:,:,2]
-    #Convert back to RGB colorspace
-    new_img = cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
-    return new_img 
-
 def generator(samples, batch_size=32):
     num_samples = len(samples)
     while 1: # Loop forever so the generator never terminates
@@ -99,8 +88,6 @@ def generator(samples, batch_size=32):
                 augmented_measurements.append(angle)
                 augmented_images.append(cv2.flip(image, 1))
                 augmented_measurements.append(angle*-1.0)
-                augmented_images.append(random_brightness(image))
-                augmented_measurements.append(angle)
 
             X_train = np.array(augmented_images)
             y_train = np.array(augmented_measurements)
