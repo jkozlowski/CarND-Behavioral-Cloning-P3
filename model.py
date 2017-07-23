@@ -120,16 +120,13 @@ model.add(Dense(1))
 model.compile(loss='mse', optimizer='adam')
 
 history_object = model.fit_generator(train_generator,
-                    samples_per_epoch=len(train_samples * num_transformations),
+                    samples_per_epoch=len(train_samples),
                     validation_data=validation_generator,
-                    nb_val_samples=len(validation_samples * num_transformations),
+                    nb_val_samples=len(validation_samples),
                     nb_epoch=args.number_epochs,
                     verbose=1)
 
 model.save(weights_file)
-
-### print the keys contained in the history object
-print(history_object.history.keys())
 
 ### plot the training and validation loss for each epoch
 plt.plot(history_object.history['loss'])
@@ -138,4 +135,4 @@ plt.title('model mean squared error loss')
 plt.ylabel('mean squared error loss')
 plt.xlabel('epoch')
 plt.legend(['training set', 'validation set'], loc='upper right')
-plt.savefig('training_visualisation.png')()
+plt.savefig('training_visualisation.png')
