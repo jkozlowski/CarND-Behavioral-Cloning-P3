@@ -42,7 +42,7 @@ with open(args.data_folder + '/driving_log.csv') as csvfile:
 train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 
 # Size of correction when deriving left and right steering measurements
-correction = 0.4
+correction = 0.27
 
 # Size of dropout
 dropout = 0.5
@@ -60,7 +60,7 @@ def get_image(path):
     filename = path.split('/')[-1]
     current_path = args.data_folder + '/IMG/' + filename
     image = cv2.imread(current_path);
-    return cv2.resize(image[40:140,:], (66,66))
+    return cv2.resize(image[30:140,:], (66,66))
 
 def generator(samples, batch_size=32):
     num_samples = len(samples)
