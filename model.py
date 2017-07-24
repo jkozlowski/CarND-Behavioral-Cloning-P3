@@ -15,7 +15,7 @@ from random import shuffle
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt 
-from keras import backend as K
+import tensorflow as tf
 
 weights_file = 'model.h5'
 
@@ -43,7 +43,7 @@ with open(args.data_folder + '/driving_log.csv') as csvfile:
 train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 
 # Size of correction when deriving left and right steering measurements
-correction = 0.30
+correction = 0.27
 
 # Size of dropout
 dropout = 0.5
@@ -109,7 +109,7 @@ model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=shape))
 # Crop the unimportant part of the image
 model.add(Cropping2D(cropping=((40,23), (0,0))))
 # Resize to 66x66, as per NVidia paper
-model.add(Lambda(lambda image: K.resize_images(image, 66, 66, 'tf')))
+model.add(Lambda(lambda image: tf.image.resize_images(image, (66, 66))))
 # NVidia
 model.add(Convolution2D(24,5,5, border_mode='valid', subsample=(2,2), activation='relu'))
 model.add(Convolution2D(36,5,5, border_mode='valid', subsample=(2,2), activation='relu'))
@@ -119,12 +119,8 @@ model.add(Convolution2D(64,3,3, border_mode='valid', subsample=(2,2), activation
 model.add(Flatten())
 model.add(Dense(100))
 model.add(Dropout(dropout))
-#model.add(Dense(80))
-#model.add(Dropout(dropout))
 model.add(Dense(50))
 model.add(Dropout(dropout))
-#model.add(Dense(20))
-# model.add(Dropout(dropout))
 model.add(Dense(10))
 model.add(Dense(1))
 
