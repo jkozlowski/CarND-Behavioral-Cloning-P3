@@ -60,7 +60,8 @@ batch_size = 200
 def get_image(path):
     filename = path.split('/')[-1]
     current_path = args.data_folder + '/IMG/' + filename
-    return cv2.imread(current_path)
+    image = cv2.imread(current_path);
+    return cv2.resize(image[23:140,:], (66,66))
 
 def generator(samples, batch_size=32):
     num_samples = len(samples)
@@ -106,10 +107,10 @@ shape = (160,320,3)
 # Create the model
 model = Sequential()
 model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=shape))
-# Crop the unimportant part of the image
-model.add(Cropping2D(cropping=((40,23), (0,0))))
+# # Crop the unimportant part of the image
+# model.add(Cropping2D(cropping=((40,23), (0,0))))
 # Resize to 66x66, as per NVidia paper
-model.add(Lambda(lambda image: tf_image.resize_images(image, (66, 66))))
+# model.add(Lambda(lambda image: tf_image.resize_images(image, (66, 66))))
 # NVidia
 model.add(Convolution2D(24,5,5, border_mode='valid', subsample=(2,2), activation='relu'))
 model.add(Convolution2D(36,5,5, border_mode='valid', subsample=(2,2), activation='relu'))

@@ -14,13 +14,14 @@ from io import BytesIO
 
 from keras.models import load_model
 import h5py
+import cv2
 from keras import __version__ as keras_version
+from tensorflow import image as tf_image
 
 sio = socketio.Server()
 app = Flask(__name__)
 model = None
 prev_image_array = None
-
 
 class SimplePIController:
     def __init__(self, Kp, Ki):
@@ -47,7 +48,6 @@ controller = SimplePIController(0.1, 0.002)
 set_speed = 9
 controller.set_desired(set_speed)
 
-
 @sio.on('telemetry')
 def telemetry(sid, data):
     if data:
@@ -61,6 +61,7 @@ def telemetry(sid, data):
         imgString = data["image"]
         image = Image.open(BytesIO(base64.b64decode(imgString)))
         image_array = np.asarray(image)
+        image_array = cv2.resize(image_array[23:140,:], (66,66))
         steering_angle = float(model.predict(image_array[None, :, :, :], batch_size=1))
 
         throttle = controller.update(float(speed))
