@@ -15,7 +15,7 @@ from random import shuffle
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt 
-import tensorflow.image as tf_image
+from tensorflow import image as tf_image
 
 weights_file = 'model.h5'
 
