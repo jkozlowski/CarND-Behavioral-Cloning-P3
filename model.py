@@ -59,7 +59,10 @@ batch_size = 200
 def get_image(path):
     filename = path.split('/')[-1]
     current_path = args.data_folder + '/IMG/' + filename
+    # Read in B G R
     image = cv2.imread(current_path);
+    # Convert to RGB
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     return cv2.resize(image[30:140,:], (66,66))
 
 def generator(samples, batch_size=32):
