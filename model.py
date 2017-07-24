@@ -15,7 +15,7 @@ from random import shuffle
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt 
-from keras import backend as K
+import tensorflow.image as tf_image
 
 weights_file = 'model.h5'
 
@@ -109,7 +109,7 @@ model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=shape))
 # Crop the unimportant part of the image
 model.add(Cropping2D(cropping=((40,23), (0,0))))
 # Resize to 66x66, as per NVidia paper
-model.add(Lambda(lambda image: K.image.resize_images(image, (66, 66))))
+model.add(Lambda(lambda image: tf_image.resize_images(image, (66, 66))))
 # NVidia
 model.add(Convolution2D(24,5,5, border_mode='valid', subsample=(2,2), activation='relu'))
 model.add(Convolution2D(36,5,5, border_mode='valid', subsample=(2,2), activation='relu'))
