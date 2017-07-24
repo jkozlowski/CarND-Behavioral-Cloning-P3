@@ -102,7 +102,7 @@ def generator(samples, batch_size=32):
 train_generator = generator(train_samples, batch_size=batch_size)
 validation_generator = generator(validation_samples, batch_size=batch_size)
 
-shape = (160,320,3)
+shape = (66,66,3)
 
 # Create the model
 model = Sequential()
