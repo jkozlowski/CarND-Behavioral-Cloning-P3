@@ -42,7 +42,7 @@ with open(args.data_folder + '/driving_log.csv') as csvfile:
 train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 
 # Size of correction when deriving left and right steering measurements
-correction = 0.27
+correction = 0.4
 
 # Size of dropout
 dropout = 0.5
