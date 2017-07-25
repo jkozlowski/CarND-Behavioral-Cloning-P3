@@ -115,8 +115,8 @@ model.add(Convolution2D(24,5,5, border_mode='valid', subsample=(2,2), activation
 model.add(Convolution2D(36,5,5, border_mode='valid', subsample=(2,2), activation='relu'))
 model.add(Convolution2D(48,5,5, border_mode='valid', subsample=(2,2), activation='relu'))
 # No strides in the final 2 convolutional layers.
-model.add(Convolution2D(64,3,3, subsample=(0,0), activation='relu'))
-model.add(Convolution2D(64,3,3, subsample=(0,0), activation='relu'))
+model.add(Convolution2D(64,3,3, activation='relu'))
+model.add(Convolution2D(64,3,3, activation='relu'))
 model.add(Flatten())
 model.add(Dense(100))
 model.add(Dropout(dropout))
