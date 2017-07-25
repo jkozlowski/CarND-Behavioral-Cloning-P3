@@ -83,6 +83,42 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 The final model architecture (model.py lines 110-122) consisted of a convolution neural network with layers
 as per the NVidia paper.
 
+This is the output from ``model.summary()``.
+
+____________________________________________________________________________________________________
+Layer (type)                     Output Shape          Param #     Connected to
+====================================================================================================
+lambda_1 (Lambda)                (None, 66, 66, 3)     0           lambda_input_1[0][0]
+____________________________________________________________________________________________________
+convolution2d_1 (Convolution2D)  (None, 31, 31, 24)    1824        lambda_1[0][0]
+____________________________________________________________________________________________________
+convolution2d_2 (Convolution2D)  (None, 14, 14, 36)    21636       convolution2d_1[0][0]
+____________________________________________________________________________________________________
+convolution2d_3 (Convolution2D)  (None, 5, 5, 48)      43248       convolution2d_2[0][0]
+____________________________________________________________________________________________________
+convolution2d_4 (Convolution2D)  (None, 3, 3, 64)      27712       convolution2d_3[0][0]
+____________________________________________________________________________________________________
+convolution2d_5 (Convolution2D)  (None, 1, 1, 64)      36928       convolution2d_4[0][0]
+____________________________________________________________________________________________________
+flatten_1 (Flatten)              (None, 64)            0           convolution2d_5[0][0]
+____________________________________________________________________________________________________
+dense_1 (Dense)                  (None, 100)           6500        flatten_1[0][0]
+____________________________________________________________________________________________________
+dropout_1 (Dropout)              (None, 100)           0           dense_1[0][0]
+____________________________________________________________________________________________________
+dense_2 (Dense)                  (None, 50)            5050        dropout_1[0][0]
+____________________________________________________________________________________________________
+dropout_2 (Dropout)              (None, 50)            0           dense_2[0][0]
+____________________________________________________________________________________________________
+dense_3 (Dense)                  (None, 10)            510         dropout_2[0][0]
+____________________________________________________________________________________________________
+dropout_3 (Dropout)              (None, 10)            0           dense_3[0][0]
+____________________________________________________________________________________________________
+dense_4 (Dense)                  (None, 1)             11          dropout_3[0][0]
+====================================================================================================
+
+The model is initially a series of three 5x5 convolutions with increasing number of features (24,36,48) and 2x2 strides, followed by two 3x3 convolutions without any strides. Next, there are three fully connected layers with 100, 50 and 10 output dimensions, with dropout layers after each. Lastly, we have the output fully connected layer that outputs the driving angle.
+
 ####3. Creation of the Training Set & Training Process
 
 To capture good driving behavior, I added additional data to the sample data.
