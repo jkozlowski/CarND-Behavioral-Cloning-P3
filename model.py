@@ -128,7 +128,7 @@ model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
 
-checkpointer = ModelCheckpoint(filepath="weights.{epoch:02d}.h5", verbose=1, save_best_only=false)
+checkpointer = ModelCheckpoint(filepath="weights.{epoch:02d}.h5", verbose=1, save_best_only=False)
 
 history_object = model.fit_generator(train_generator,
                     samples_per_epoch=len(train_samples * num_transformations),
