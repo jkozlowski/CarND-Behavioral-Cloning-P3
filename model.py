@@ -2,6 +2,7 @@ import argparse
 import csv
 import cv2
 import numpy as np
+from keras.callbacks import ModelCheckpoint
 from keras.models import Sequential
 from keras.layers import Flatten, Dense, Lambda, Dropout
 from keras.layers.convolutional import Convolution2D, Cropping2D
@@ -113,8 +114,9 @@ model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=shape))
 model.add(Convolution2D(24,5,5, border_mode='valid', subsample=(2,2), activation='relu'))
 model.add(Convolution2D(36,5,5, border_mode='valid', subsample=(2,2), activation='relu'))
 model.add(Convolution2D(48,5,5, border_mode='valid', subsample=(2,2), activation='relu'))
-model.add(Convolution2D(64,3,3, border_mode='same', subsample=(2,2), activation='relu'))
-model.add(Convolution2D(64,3,3, border_mode='valid', subsample=(2,2), activation='relu'))
+# No strides in the final 2 convolutional layers.
+model.add(Convolution2D(64,3,3, subsample=(0,0), activation='relu'))
+model.add(Convolution2D(64,3,3, subsample=(0,0), activation='relu'))
 model.add(Flatten())
 model.add(Dense(100))
 model.add(Dropout(dropout))
@@ -126,12 +128,15 @@ model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
 
+checkpointer = ModelCheckpoint(filepath="weights.{epoch:02d}.h5", verbose=1, save_best_only=false)
+
 history_object = model.fit_generator(train_generator,
                     samples_per_epoch=len(train_samples * num_transformations),
                     validation_data=validation_generator,
                     nb_val_samples=len(validation_samples * num_transformations),
                     nb_epoch=args.number_epochs,
-                    verbose=1)
+                    verbose=1,
+                    callbacks=[checkpointer])
 
 model.save(weights_file)
 
